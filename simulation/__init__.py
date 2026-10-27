@@ -3,6 +3,7 @@ from .environment import ContinuousObstacle, LineSegmentObstacle, FunctionObstac
 from .robot import RobotState, RobotConfig, Robot
 from .sensor import RayHit, LidarConfig, LidarSensor
 from .planner import WaypointController, BasePlanner, CyclicWaypointPlanner
+from .see_planner import SEEPlanner, SEEParameters
 
 __all__ = [
     "ContinuousObstacle",
@@ -19,4 +20,6 @@ __all__ = [
     "WaypointController",
     "BasePlanner",
     "CyclicWaypointPlanner",
+    "SEEPlanner",
+    "SEEParameters",
 ]

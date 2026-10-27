@@ -53,17 +53,14 @@ def test_workspace_boundary_enforcement():
 
 
 def test_ray_segment_intersection():
-    """Verify ray casting hits an obstacle at the exact Euclidean distance."""
     env = Environment(x_bounds=(-10.0, 10.0), y_bounds=(-10.0, 10.0), include_boundary_as_obstacles=False)
-    # Vertical wall at x = 3.0 from y = -2.0 to y = 2.0
     env.add_obstacle(LineSegmentObstacle((3.0, -2.0), (3.0, 2.0)))
 
     cfg = LidarConfig(num_rays=1, fov_rad=0.0, max_range=5.0, noise_std=0.0)
     sensor = LidarSensor(config=cfg)
 
-    # Robot at (0.0, 0.0) pointing directly right along +X
     robot_state = RobotState(x=0.0, y=0.0, theta=0.0)
-    hits = sensor.cast_all_rays(robot_state, env)
+    hits = sensor.scan(robot_state, env)
 
     assert len(hits) == 1
     hit = hits[0]
@@ -73,17 +70,14 @@ def test_ray_segment_intersection():
 
 
 def test_ray_miss_and_range_cutoff():
-    """Verify rays passing by obstacles or beyond max range report detected=False."""
     env = Environment(x_bounds=(-10.0, 10.0), y_bounds=(-10.0, 10.0), include_boundary_as_obstacles=False)
-    # Wall located at x = 8.0
     env.add_obstacle(LineSegmentObstacle((8.0, -2.0), (8.0, 2.0)))
 
-    # Sensor with max range 4.0 meters
     cfg = LidarConfig(num_rays=1, fov_rad=0.0, max_range=4.0, noise_std=0.0)
     sensor = LidarSensor(config=cfg)
 
     robot_state = RobotState(x=0.0, y=0.0, theta=0.0)
-    hits = sensor.cast_all_rays(robot_state, env)
+    hits = sensor.scan(robot_state, env)
 
     assert len(hits) == 1
     hit = hits[0]
